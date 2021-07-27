@@ -80,12 +80,12 @@ def create_post(
 
 @app.get("/posts/")
 def post_list(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)
 ):
     return crud.post_list(db=db)
 
 @app.get("/posts/{posts_id}")
-def post_detail(post_id:int, db: Session = Depends(get_db)):
+def post_detail(post_id:int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)):
     return crud.get_post(db=db, id=post_id)
 
 
