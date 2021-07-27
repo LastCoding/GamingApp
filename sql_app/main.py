@@ -21,6 +21,7 @@ def get_db():
     finally:
         db.close()
 
+
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -32,7 +33,8 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, crud.SECRET_KEY, algorithms=[crud.ALGORITHM])
+        payload = jwt.decode(token, crud.SECRET_KEY,
+                             algorithms=[crud.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -65,18 +67,21 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
 async def read_users_me(current_user: models.User = Depends(get_current_user)):
     return current_user
 
+
 @app.post("/users/")
 def create_user(
     user: schemas.UserCreate, db: Session = Depends(get_db)
 ):
     return crud.create_user(db=db, user=user)
 
+
 @app.post("/posts/")
 def create_post(
-    title: str, body:str,  db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
+    title: str, body: str,  db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
 ):
-    user_id=current_user.id
+    user_id = current_user.id
     return crud.create_post(db=db, user_id=user_id, title=title, body=body)
+
 
 @app.get("/posts/")
 def post_list(
@@ -84,8 +89,9 @@ def post_list(
 ):
     return crud.post_list(db=db)
 
+
 @app.get("/posts/{posts_id}")
-def post_detail(post_id:int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)):
+def post_detail(post_id: int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)):
     return crud.get_post(db=db, id=post_id)
 
 

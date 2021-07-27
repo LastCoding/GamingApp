@@ -6,10 +6,10 @@ import datetime
 
 from .database import Base
 
+
 class User(Base):
 
     __tablename__ = "users"
-
 
     id = Column(Integer, primary_key=True)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
@@ -19,6 +19,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     post = relationship("Post", back_populates="owner")
+
 
 class Post(Base):
     __tablename__ = "posts"

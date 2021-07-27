@@ -19,18 +19,22 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
+
 class UserCreate(User):
     password: str
     email: str
 
+
 class PostBase(BaseModel):
     title: str
     body: str
+
 
 class PostList(PostBase):
     created_date: Optional[datetime.datetime]
     owner_id: int
     owner: User
 
+
 class Config:
-    orm_mode=True
+    orm_mode = True
