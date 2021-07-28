@@ -1,11 +1,16 @@
 from datetime import datetime, timedelta
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException, status
+from sqlalchemy import update
+from sqlalchemy.sql.functions import user
+from fastapi import Response, Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from . import crud, models, schemas
 from .database import SessionLocal, engine
 from jose import JWTError, jwt
+from dto.user import User
+from dto.post import Post
+from starlette.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_401_UNAUTHORIZED
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -91,18 +96,41 @@ def post_list(
 
 
 @app.get("/posts/{posts_id}")
-def post_detail(post_id: int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)):
-    return crud.get_post(db=db, id=post_id)
+def post_detail(
+    posts_id: int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)
+):
+    return crud.get_post(db=db, id=posts_id)
 
 
-# @app.post("/items/", response_model=schemas.Item)
-# def create_item_for_user(
-#     item: schemas.ItemCreate, db: Session = Depends(get_db)
-# ):
-#     return crud.create_user_item(db=db, item=item)
+@app.put("/posts/{id}")
+async def update_post(
+    id: int, post: Post,  db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)
+):
+    print(auth.id)
+    isOwner = crud.check_Owner(db, auth.id, id)
+    print(isOwner)
+    if isOwner:
+        crud.upd_post(db, id, post)
+        return Response(status_code=HTTP_200_OK)
+    else:
+        return Response(status_code=HTTP_401_UNAUTHORIZED)
 
 
-# @app.get("/items/", response_model=List[schemas.Item])
-# def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     items = crud.get_items(db, skip=skip, limit=limit)
-#     return items
+@app.delete("/posts/{id}")
+def delete_post(
+    post_id: int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)
+):
+    isOwner = crud.check_Owner(db, auth.id, post_id)
+    if isOwner:
+        crud.del_post(db=db, id=post_id)
+        return Response(status_code=HTTP_204_NO_CONTENT)
+    else:
+        return Response(status_code=HTTP_401_UNAUTHORIZED)
+
+
+@app.get("/users/{users_id}")
+def read_user_details(
+    user_id: int, db: Session = Depends(get_db), auth: models.User = Depends(get_current_user)
+):
+    userModel = crud.get_user_by_id(db=db, id=user_id)
+    return User(userModel)
