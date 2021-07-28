@@ -29,7 +29,7 @@ def get_user(db, username: str):
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(username=user.username,
+    db_user = models.User(username=user.username, email=user.email,
                           hashed_password=get_password_hash(user.password))
     db.add(db_user)
     db.commit()
@@ -57,8 +57,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def create_post(db: Session, user_id: int, title: str, body: str):
-    db_post = models.Post(title=title, body=body, owner_id=user_id)
+def create_post(db: Session, user_id: int, name: str, platforms: str, genre: str):
+    db_post = models.Post(name=name, platforms=platforms,
+                          genre=genre, owner_id=user_id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
@@ -81,13 +82,16 @@ def del_post(db, id: int):
     db.query(models.Post).filter(models.Post.id == id).delete()
     db.commit()
 
+
 def check_Owner(db, userId: int, postID):
     postObject = db.query(models.Post).filter(models.Post.id == postID).first()
     return postObject.owner_id == userId
 
+
 def upd_post(db, id: int, postDTO: Post):
     db.query(models.Post).filter(models.Post.id == id).update({
-        "title" : postDTO.title,
-        "body" : postDTO.body
+        "name": postDTO.name,
+        "platforms": postDTO.platforms,
+        "genre": postDTO.genre
     })
     db.commit()

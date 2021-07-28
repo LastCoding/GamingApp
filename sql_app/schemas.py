@@ -26,8 +26,9 @@ class UserCreate(User):
 
 
 class PostBase(BaseModel):
-    title: str
-    body: str
+    name: str
+    platforms: str
+    genre: str
 
 
 class PostList(PostBase):

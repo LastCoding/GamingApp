@@ -1,7 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import column, true
-from sqlalchemy_utils import EmailType
 import datetime
 
 from .database import Base
@@ -13,7 +12,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    email = Column(EmailType)
+    email = Column(String)
     username = Column(String, unique=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
@@ -27,8 +26,9 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
     is_active = Column(Boolean, default=True)
-    title = Column(String)
-    body = Column(String)
+    name = Column(String)
+    platforms = Column(String)
+    genre = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="post")
