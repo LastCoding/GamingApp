@@ -1,1 +1,1 @@
-web: uvicorn sql_app.main:app --reload --workers 4
+web: gunicorn -w 4 -k uvicorn.workers.Uvicornworker sql_app.main:app
