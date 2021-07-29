@@ -11,4 +11,4 @@ Nombre y apellidos: *Iñaki Marzo Díaz*
 
 2: Debes ejecutar el comando: *uvicorn sql_app.main:app --reload*, para ejecutar el servidor de desarrollo.
 
-3: Abrir un navegador, y conectarte a http://localhost:8080/
+3: Abrir un navegador, y conectarte a http://127.0.0.1:8000/docs
