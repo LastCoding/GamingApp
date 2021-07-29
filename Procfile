@@ -1,1 +1,1 @@
-web: gunicorn -w 4 -k uvicorn.workers.Uvicornworker sql_app.main:app
+web: gunicorn -w 4 -k uvicorn.workers.Uvicornworker sql_app.main:app --port 8000 --host 127.0.0.1
