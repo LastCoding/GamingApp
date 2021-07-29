@@ -7,3 +7,6 @@ passlib[bcrypt]
 sqlalchemy-utils
 alembic
 autopep8
+mysqlclient
+mysql-connector-python
+pymysql

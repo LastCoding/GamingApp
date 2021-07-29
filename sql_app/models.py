@@ -12,9 +12,9 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    email = Column(String)
-    username = Column(String, unique=True)
-    hashed_password = Column(String)
+    email = Column(String(255))
+    username = Column(String(255), unique=True)
+    hashed_password = Column(String(255))
     is_active = Column(Boolean, default=True)
 
     post = relationship("Post", back_populates="owner")
@@ -26,9 +26,9 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
     is_active = Column(Boolean, default=True)
-    name = Column(String)
-    platforms = Column(String)
-    genre = Column(String)
+    name = Column(String(255))
+    platforms = Column(String(255))
+    genre = Column(String(255))
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="post")
