@@ -7,7 +7,7 @@ Nombre y apellidos: *Iñaki Marzo Díaz*
 
 ## Cómo empiezo
 
-1: Debes ejecutar el comando: *pip install -r .\requirements.txt*, para tener todas las dependencias.
+1: Debes ejecutar el comando: *pip install -r requirements.txt*, para tener todas las dependencias.
 
 2: Debes ejecutar el comando: *uvicorn sql_app.main:app --reload*, para ejecutar el servidor de desarrollo.
 
