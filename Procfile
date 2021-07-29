@@ -1,1 +1,1 @@
-web: uvicorn sql_app.main:app --reload
+web: uvicorn sql_app.main:app --reload ---workers 4
